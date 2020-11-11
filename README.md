@@ -1,7 +1,7 @@
 # BattleShips
 
 Terminal:
-make - for building project
-make run - to run project
-make clean - clear object files.
-ssh auth
+make - for building project <br/>
+make run - to run project <br/>
+make clean - clear object files. <br/>
+
