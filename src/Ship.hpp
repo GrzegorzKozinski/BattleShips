@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <utility>
 #include <set>
 #include <vector>
@@ -29,7 +31,10 @@ public:
 
 Ship::Ship(std::set<std::pair<char, int>> coords) :  coords_(coords), shipSize(coords.size())
 {
-    std::cout << "Ship constructed \n";
+    std::cout << "Ship constructed: ";
+   
+    printCoords();
+    
 }
 
 Ship::~Ship()

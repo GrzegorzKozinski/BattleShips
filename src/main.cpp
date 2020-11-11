@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "Communicator.hpp"
 
 using namespace BattleShips;
 

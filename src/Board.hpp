@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Ship.hpp"
+#include "Communicator.hpp"
 
 using namespace BattleShips;
 namespace BattleShips
@@ -45,8 +48,8 @@ Board::Board()
     }
     
 
-    shipsSetup();
-    //viaCommunicatorSetup();
+    //shipsSetup();
+    viaCommunicatorSetup();
 
     boardView();
 
@@ -59,9 +62,15 @@ Board::~Board()
 }
 void Board::viaCommunicatorSetup()
 {
-    //std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
+    std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
 
-   // commPtr -> shipPlacementGuide(ships);
+    commPtr -> shipPlacementGuide(ships);
+    for(auto& ship : ships) 
+    {
+       
+        ship.markPosition(board); 
+
+    }
 }
 void Board::boardView()
 {
@@ -108,7 +117,7 @@ void Board::shipsSetup()
     
     for(auto& ship : ships) 
     {
-        ship.printCoords(); //print ship coords 
+       
         ship.markPosition(board); 
 
     }
