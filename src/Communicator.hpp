@@ -3,8 +3,8 @@
 #include <vector>
 #include <memory>
 
-#include "Board.cpp"
-#include "Ship.cpp"
+#include "Board.hpp"
+#include "Ship.hpp"
 using namespace BattleShips;
 namespace BattleShips
 {

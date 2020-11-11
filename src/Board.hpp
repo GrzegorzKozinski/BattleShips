@@ -1,4 +1,4 @@
-#include "Ship.cpp"
+#include "Ship.hpp"
 
 using namespace BattleShips;
 namespace BattleShips
@@ -45,8 +45,8 @@ Board::Board()
     }
     
 
-    //shipsSetup();
-    viaCommunicatorSetup();
+    shipsSetup();
+    //viaCommunicatorSetup();
 
     boardView();
 

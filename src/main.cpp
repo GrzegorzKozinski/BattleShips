@@ -1,4 +1,4 @@
-#include "Player.cpp"
+#include "Player.hpp"
 
 using namespace BattleShips;
 

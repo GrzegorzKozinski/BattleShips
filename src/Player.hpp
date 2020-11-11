@@ -1,4 +1,4 @@
-#include "Board.cpp"
+#include "Board.hpp"
 
 namespace BattleShips
 {
