@@ -15,7 +15,7 @@ class Board
 private:
 
 std::vector<std::vector<char>> board;
-std::vector<Ship> ships;
+std::set<Ship> ships;
 std::vector<char> letters;
 
 public:
@@ -48,8 +48,8 @@ Board::Board()
     }
     
 
-    //shipsSetup();
-    viaCommunicatorSetup();
+    shipsSetup();
+    //viaCommunicatorSetup();
 
     boardView();
 
@@ -65,7 +65,7 @@ void Board::viaCommunicatorSetup()
     std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
 
     commPtr -> shipPlacementGuide(ships);
-    for(auto& ship : ships) 
+    for(auto ship : ships) 
     {
        
         ship.markPosition(board); 
@@ -102,20 +102,20 @@ void Board::shipsSetup()
     
     
     
-    { // manual ship setup
-        ships.emplace_back(std::set<std::pair<char, int>>{
+    { //manual ship setup
+        ships.insert(std::set<std::pair<char, int>>{
         {'A', 1},
         {'A', 2},
         {'A', 3}});
 
-        ships.emplace_back(std::set<std::pair<char, int>>{
+        ships.insert(std::set<std::pair<char, int>>{
         {'C', 2},
         {'D', 2},
         {'E', 2},
         {'F', 2}});
     }
     
-    for(auto& ship : ships) 
+    for(auto ship : ships) 
     {
        
         ship.markPosition(board); 
