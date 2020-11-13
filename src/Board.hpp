@@ -35,19 +35,9 @@ Board::Board()
     
     for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i+65);
     board.push_back(letters);
-
-    for(int i = 0; i < BOARD_SIZE; ++i)
-    {
-        std::vector<char> tmp;
-        for (int j = 0; j < BOARD_SIZE; ++j)
-        {
-            tmp.push_back(' ');  
-        }
-        board.push_back(tmp);
-        
-    }
+   
+    for(int i = 0; i < BOARD_SIZE; ++i) board.push_back(std::vector<char>(BOARD_SIZE,' '));
     
-
     shipsSetup();
     //viaCommunicatorSetup();
 
@@ -65,7 +55,7 @@ void Board::viaCommunicatorSetup()
     std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
 
     commPtr -> shipPlacementGuide(ships);
-    for(auto ship : ships) 
+    for(auto ship : ships) // why cant i use const auto& ??
     {
        
         ship.markPosition(board); 
@@ -114,10 +104,10 @@ void Board::shipsSetup()
         {'E', 2},
         {'F', 2}});
     }
-    
-    for(auto ship : ships) 
+    int a =0;
+    for(auto ship : ships) // why cant i use const auto& ??
     {
-       
+        std::cout << "a = " << a++ <<std::endl;
         ship.markPosition(board); 
 
     }

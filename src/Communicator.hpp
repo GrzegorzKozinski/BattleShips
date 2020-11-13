@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -6,7 +7,7 @@
 
 #include "Board.hpp"
 #include "Ship.hpp"
-using namespace BattleShips;
+
 namespace BattleShips
 {
 class Communicator
@@ -18,7 +19,7 @@ public:
     ~Communicator();
 
     std::pair<char, int> strToPair(std::string str);
-    bool isTaken(const std::set<Ship>& ships, const std::string& input) const;
+    bool isTaken(std::set<Ship>& ships, const std::pair<char, int>& input) const;
     void shipPlacementGuide(std::set<Ship>& ships);
    
 };
@@ -40,21 +41,22 @@ Communicator::~Communicator()
     std::cout << "Communicator destroyed!\n";
 }
 
-bool Communicator::isTaken(const std::set<Ship>& ships, const std::string& input) const
+bool Communicator::isTaken(std::set<Ship>& ships, const std::pair<char, int>& input) const
 {
-    bool isFieldTaken = false;
+    
     std::set<std::pair<char, int>>::iterator it;
     for(const auto& ship : ships)
     {
+    
 
-        it = std::find(ship.getCoords().begin(), ship.getCoords().end(), strToPair(input));
-
+        it = std::find(ship.getCoords().begin(), ship.getCoords().end(), input);
+        std::cout << "------------Breaks here? " << input.first<<input.second << " a4665465dded\n";
         if(it != ship.getCoords().end()) //found
         { 
-            fieldTaken == true;
+          return true;
         }
     }
-    return isFieldTaken;
+    return false;
 }
 
 
@@ -64,29 +66,35 @@ void Communicator::shipPlacementGuide(std::set<Ship>& ships)
    
     std::set<std::pair<char, int>> coords_tmp;
     int i = 0;
-    bool fieldTaken = isTaken(ships);
+    bool fieldTaken;
     
    
     do
     {
-        //possible_moves = getPossibleFields(ships);
         
         std::cout << "Choose field of your ship:\n ";
         std::getline(std::cin, input);
-
-        fieldTaken = isTaken(ships);
-
+       
+        fieldTaken = isTaken(ships, strToPair(input));
+        
         if(fieldTaken == false)
         {
             coords_tmp.insert(strToPair(input));
             std::cout << "Field " << input << " added\n";
             ++i;
         }
+        else
+        {
+            std::cout << "invalid input\n";
+        }
         
         
-      
+    std::cout << " i = " << i;
     }while(i<3);
-    ships.insert(coords_tmp);
+    ships.emplace(coords_tmp);
+
+    
+
 
     
 }
