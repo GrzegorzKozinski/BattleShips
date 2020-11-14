@@ -1,15 +1,18 @@
 #include "Ship.hpp"
 
 
-namespace BattleShips
-{
+
+namespace BattleShips{
 
 unsigned int Ship::shipId = 0;
+
 Ship::Ship(std::set<std::pair<char, int>> coords) : coords_(coords), shipSize(coords.size())
 {
-    std::cout << "Ship constructed: ";
+    
     shipId++;
+    setShipId(shipId);
     printCoords();
+    std::cout << "Ship #"<< getShipId()<<" constructed\n";
     
 }
 
@@ -18,9 +21,9 @@ Ship::~Ship()
     std::cout << "Ship no."<<getShipId()<< " destroyed \n";
 }
 
-bool Ship::operator<(const Ship& other) const
+void Ship::setShipId(unsigned int& id)
 {
-    return shipId < other.getShipId();
+    shipId = id;
 }
 
 unsigned int Ship::getShipId() const
@@ -74,4 +77,23 @@ void Ship::markPosition(std::vector<std::vector<char>>& board)
     }
 }
 
+bool Ship::isFiledOnCoords(const std::pair<char, int>& p ) const
+{   
+    //std::cout << "Ship::isFieldOnCoord - before find - shipId: " << getShipId() <<"\n";
+    auto it = std::find(coords_.begin(), coords_.end(), p);
+    //std::cout << "Ship::isFieldOnCoord - AFTER find \n";
+    if(it != coords_.end()) //found
+    {
+        //std::cout << "Ship::isFieldOnCoord - found coord!\n";
+        return true;
+    }
+    else    //not found
+    {
+        //std::cout << "Ship::isFieldOnCoord - coord NOT found\n";
+        return false;
+    }
+        
+    
+    return false;
+}
 }// namespace BattleShips
