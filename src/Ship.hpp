@@ -10,9 +10,10 @@ namespace BattleShips{
 class Ship
 {
 private:
-    static unsigned int shipId;
+    static unsigned int shipIdCounter;
     std::set<std::pair<char, int>> coords_;
-    unsigned shipSize; 
+    unsigned shipSize;
+    unsigned int shipId;
     
 public:
     Ship(std::set<std::pair<char, int>> coords);

@@ -4,13 +4,14 @@
 
 namespace BattleShips{
 
-unsigned int Ship::shipId = 0;
+unsigned int Ship::shipIdCounter = 0;
 
 Ship::Ship(std::set<std::pair<char, int>> coords) : coords_(coords), shipSize(coords.size())
 {
     
-    shipId++;
-    setShipId(shipId);
+    
+    setShipId(shipIdCounter);
+    shipIdCounter++;
     printCoords();
     std::cout << "Ship #"<< getShipId()<<" constructed\n";
     
@@ -18,7 +19,7 @@ Ship::Ship(std::set<std::pair<char, int>> coords) : coords_(coords), shipSize(co
 
 Ship::~Ship()
 {
-    std::cout << "Ship no."<<getShipId()<< " destroyed \n";
+    std::cout << "Ship #"<<getShipId()<< " destroyed \n";
 }
 
 void Ship::setShipId(unsigned int& id)
@@ -92,8 +93,6 @@ bool Ship::isFiledOnCoords(const std::pair<char, int>& p ) const
         //std::cout << "Ship::isFieldOnCoord - coord NOT found\n";
         return false;
     }
-        
-    
-    return false;
+
 }
 }// namespace BattleShips

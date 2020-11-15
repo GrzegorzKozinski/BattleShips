@@ -11,7 +11,7 @@ namespace BattleShips{
 Board::Board()
 {
     
-    for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_CHAR_TO_INT);
+    for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_INT_TO_LETTER);
     board.push_back(letters);
    
     for(int i = 0; i < BOARD_SIZE; ++i) board.push_back(std::vector<char>(BOARD_SIZE,' '));
@@ -39,6 +39,8 @@ void Board::viaCommunicatorSetup()
     std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
 
     commPtr -> shipPlacementGuide(ships);
+     commPtr -> shipPlacementGuide(ships);
+      commPtr -> shipPlacementGuide(ships);
 }
 
 void Board::boardView()
