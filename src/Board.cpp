@@ -39,8 +39,7 @@ void Board::viaCommunicatorSetup()
     std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
 
     commPtr -> shipPlacementGuide(ships);
-     commPtr -> shipPlacementGuide(ships);
-      commPtr -> shipPlacementGuide(ships);
+    
 }
 
 void Board::boardView()
