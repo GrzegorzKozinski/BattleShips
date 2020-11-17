@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include <vector>
+
 #include <memory>
 #include <set>
 
@@ -13,7 +13,9 @@ Board::Board()
     
     for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_INT_TO_LETTER);
     board.push_back(letters);
-   
+    
+    //std::vector<std::vector<char>> borad(BOARD_SIZE, std::vector<char>(BOARD_SIZE, ' '));
+
     for(int i = 0; i < BOARD_SIZE; ++i) board.push_back(std::vector<char>(BOARD_SIZE,' '));
     
     //shipsSetup();
@@ -36,7 +38,7 @@ Board::~Board()
 
 void Board::viaCommunicatorSetup()
 {
-    std::unique_ptr<Communicator> commPtr = std::make_unique<Communicator>();
+    std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
 
     commPtr -> shipPlacementGuide(ships);
     

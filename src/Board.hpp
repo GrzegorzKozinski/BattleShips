@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Ship.hpp"
-#include "Communicator.hpp"
+#include "UsrCommunicator.hpp"
 
 
 namespace BattleShips{
