@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ICommunicator.hpp"
-
+#include<iterator>
 
 namespace BattleShips{
     
@@ -25,7 +25,7 @@ public:
     bool properInputFormat(const std::string& input);
     bool addField(const std::string& input, std::set<std::pair<char, int>>& coords_tmp, std::vector<Ship>& ships);
     bool properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp, std::vector<Ship>& ships);
-    bool fieldNeigbour(const std::pair<char, int>& field, std::pair<char, int>& input);
+    bool fieldNeigbour(const std::set<std::pair<char, int>>& fields, std::pair<char, int>& input);
    
 };
 } // namespace BattleShips

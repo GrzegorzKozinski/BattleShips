@@ -8,8 +8,6 @@
 namespace BattleShips{
 class ICommunicator
 {
-
-
     
 public:
     virtual ~ICommunicator() {};

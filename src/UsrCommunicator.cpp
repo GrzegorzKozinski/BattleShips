@@ -50,6 +50,13 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
         
     }while(properInputFormat(input, coords_tmp, ships) == false ); //second field input chceck
     coords_tmp.insert(strToPair(input));
+    do
+    {
+        std::cout << "Choose 3. field of your ship:\n ";
+        std::getline(std::cin, input);
+        
+    }while(properInputFormat(input, coords_tmp, ships) == false ); //third field input chceck
+    coords_tmp.insert(strToPair(input));
    
 
     
@@ -84,6 +91,7 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
     switch (coords_tmp.size())
     {
     case (0):
+    {
     fieldTaken = isTaken(ships, inputPair);
     
     if(fieldTaken == false)            
@@ -97,20 +105,15 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
         std::cout << "Invalid Field\n";
         return false;
     }
-    
-    
-    
-    std::cout << "Invalid input\n";
-    return false;
+    }
 
     case (1):
-   
+    {
     fieldTaken = isTaken(ships, inputPair);
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
     auto first_coord = *coords_tmp.begin();
-    if(fieldTaken == false && it == coords_tmp.end() && fieldNeigbour(first_coord, inputPair) == true)            
+    if(fieldTaken == false && it == coords_tmp.end() && fieldNeigbour(coords_tmp, inputPair) == true)            
     {
-        
         std::cout << "Field " << input << " OK\n";
         return true;
     }
@@ -119,23 +122,93 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
         std::cout << "Invalid Field\n";
         return false;
     }
-    
+    }
+    case (2):
+    {
+    fieldTaken = isTaken(ships, inputPair);
+    auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
+    auto first_coord = *coords_tmp.begin();
+   
+    if(fieldTaken == false && it == coords_tmp.end() && fieldNeigbour(coords_tmp, inputPair) == true)            
+    {
+        std::cout << "Field " << input << " OK\n";
+        return true;
+    }
+    else
+    {
+        std::cout << "Invalid Field\n";
+        return false;
+    }
+    }
+    default:
+    {
     std::cout << "Invalid input\n";
     return false;
-
+    }
     }
 
     return false;
+   
 }
 
-bool UsrCommunicator::fieldNeigbour(const std::pair<char, int>& field, std::pair<char, int>& inputPair)
+bool UsrCommunicator::fieldNeigbour(const std::set<std::pair<char, int>>& fields, std::pair<char, int>& inputPair)
 {
-    std::set<std::pair<char, int>> fieldNeigbours{
-        {field.first-1, field.second},
-        {field.first+1, field.second},
-        {field.first, field.second-1},
-        {field.first, field.second+1}
-    };
+    std::set<std::pair<char, int>> fieldNeigbours;
+    
+    for(const auto& field : fields)
+    {
+        fieldNeigbours.insert({field.first-1, field.second});
+        fieldNeigbours.insert({field.first+1, field.second});
+        fieldNeigbours.insert({field.first, field.second-1});
+        fieldNeigbours.insert({field.first, field.second+1});
+    }
+    /*
+     std::set<int> c = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+ 
+    // erase all odd numbers from c
+    for(auto it = c.begin(); it != c.end(); ) {
+        if(*it % 2 == 1)
+            it = c.erase(it);
+        else
+            ++it;
+    }
+ 
+    for(int n : c) {
+        std::cout << n << ' ';
+    }
+    */
+    if(fields.size() > 1) 
+    {
+        auto firstField =  *(fields.begin());
+        auto secondField = *(std::next(fields.begin(),1));
+        if(firstField.first == secondField.first)
+        {
+            std::cout<<"Same column - remove fields from diff cols";
+            for(auto it = fieldNeigbours.begin(); it != fieldNeigbours.end(); )
+            {
+            
+                if((*it).first != firstField.first ) it = fieldNeigbours.erase(it);
+                else ++it;
+       
+            }
+        }
+       
+        
+        if(firstField.second == secondField.second)
+        {
+            std::cout<<"Same row - remove fields from diff rows";
+            for(auto it = fieldNeigbours.begin(); it != fieldNeigbours.end(); )
+            {
+
+                if((*it).second != firstField.second) it = fieldNeigbours.erase(it);
+                else ++it;
+       
+            }
+        }
+       
+    }
+    
+    
     auto it = std::find(fieldNeigbours.begin(), fieldNeigbours.end(), inputPair);
     if(it != fieldNeigbours.end())
     {
