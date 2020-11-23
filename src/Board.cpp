@@ -14,12 +14,10 @@ Board::Board()
     for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_INT_TO_LETTER);
     board.push_back(letters);
     
-    //std::vector<std::vector<char>> borad(BOARD_SIZE, std::vector<char>(BOARD_SIZE, ' '));
+    
 
     for(int i = 0; i < BOARD_SIZE; ++i) board.push_back(std::vector<char>(BOARD_SIZE,' '));
     
-    //shipsSetup();
-
     viaCommunicatorSetup();
     
     for(auto& ship : ships) // marks all its ships on board
@@ -40,6 +38,7 @@ void Board::viaCommunicatorSetup()
 {
     std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
 
+    commPtr -> shipPlacementGuide(ships);
     commPtr -> shipPlacementGuide(ships);
     
 }

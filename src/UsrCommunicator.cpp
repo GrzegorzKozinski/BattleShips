@@ -34,16 +34,20 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
     std::string input;
    
     std::set<std::pair<char, int>> coords_tmp;
-    int i = 0;
-   
-    do
+    //int i = 0;
+    while(coords_tmp.size() < SHIP_SIZE)
     {
-        std::cout << "Choose 1. field of your ship:\n ";
-        std::getline(std::cin, input);
-        
-    }while(properInputFormat(input, coords_tmp, ships) == false ); //first field input chceck
-    coords_tmp.insert(strToPair(input));
-    do
+        do
+        {
+            std::cout << "Choose "<< coords_tmp.size() + 1 <<". field of your ship:\n ";
+            std::getline(std::cin, input);
+
+        }while(properInputFormat(input, coords_tmp, ships) == false ); // field input chceck
+
+        coords_tmp.insert(strToPair(input));
+    }
+
+    /* do
     {
         std::cout << "Choose 2. field of your ship:\n ";
         std::getline(std::cin, input);
@@ -56,22 +60,32 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
         std::getline(std::cin, input);
         
     }while(properInputFormat(input, coords_tmp, ships) == false ); //third field input chceck
-    coords_tmp.insert(strToPair(input));
-   
+    coords_tmp.insert(strToPair(input)); */
 
-    
     ships.emplace_back(coords_tmp);
 
 }
+bool UsrCommunicator::properInputFormat(const std::pair<char, int>& inputPair)
+{
 
+    auto it = std::find(letters.begin(), letters.end(), inputPair.first); //repeated code in overloaded method
+    if(it == letters.end()) return false;
+
+    if((inputPair.second < 1) || (inputPair.second > BOARD_SIZE )) //repeated code in overloaded method
+    {
+        return false;
+    }
+
+    return true;
+}
 bool UsrCommunicator::properInputFormat(const std::string& input)
 {
     if(input.size() != 2) return false; 
 
-    auto it = std::find(letters.begin(), letters.end(), input.at(0));
+    auto it = std::find(letters.begin(), letters.end(), input.at(0)); //repeated code in overloaded method
     if(it == letters.end()) return false;
 
-    if((input.at(1) - ASCII_CHAR_TO_INT) < 1 || (input.at(1) - ASCII_CHAR_TO_INT)  > BOARD_SIZE )
+    if((input.at(1) - ASCII_CHAR_TO_INT) < 1 || (input.at(1) - ASCII_CHAR_TO_INT)  > BOARD_SIZE ) //repeated code in overloaded method
     {
         return false;
     }
@@ -82,37 +96,24 @@ bool UsrCommunicator::properInputFormat(const std::string& input)
 bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp, std::vector<Ship>& ships)
 {
     bool fieldTaken = true;
+    if(properInputFormat(input)  == false) return false;
     auto inputPair = strToPair(input);
-    if(properInputFormat(input) == false)
-    {
-        std::cout<< "Invalid input";
-        return false;
-    }
+    if(isTaken(ships, inputPair) == true) return false;
+    
     switch (coords_tmp.size())
     {
     case (0):
     {
-    fieldTaken = isTaken(ships, inputPair);
-    
-    if(fieldTaken == false)            
-    {
-       
         std::cout << "Field " << input << " OK\n";
         return true;
-    }
-    else
-    {
-        std::cout << "Invalid Field\n";
-        return false;
-    }
     }
 
     case (1):
     {
-    fieldTaken = isTaken(ships, inputPair);
+    
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
     auto first_coord = *coords_tmp.begin();
-    if(fieldTaken == false && it == coords_tmp.end() && fieldNeigbour(coords_tmp, inputPair) == true)            
+    if(it == coords_tmp.end() && fieldNeighbour(coords_tmp, inputPair) == true)            
     {
         std::cout << "Field " << input << " OK\n";
         return true;
@@ -125,11 +126,11 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
     }
     case (2):
     {
-    fieldTaken = isTaken(ships, inputPair);
+    
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
     auto first_coord = *coords_tmp.begin();
    
-    if(fieldTaken == false && it == coords_tmp.end() && fieldNeigbour(coords_tmp, inputPair) == true)            
+    if(it == coords_tmp.end() && fieldNeighbour(coords_tmp, inputPair) == true)            
     {
         std::cout << "Field " << input << " OK\n";
         return true;
@@ -151,66 +152,58 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
    
 }
 
-bool UsrCommunicator::fieldNeigbour(const std::set<std::pair<char, int>>& fields, std::pair<char, int>& inputPair)
+bool UsrCommunicator::fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp, std::pair<char, int>& inputPair)
 {
-    std::set<std::pair<char, int>> fieldNeigbours;
+    std::set<std::pair<char, int>> fieldNeighbours;
     
-    for(const auto& field : fields)
+    for(const auto& field : coords_tmp)
     {
-        fieldNeigbours.insert({field.first-1, field.second});
-        fieldNeigbours.insert({field.first+1, field.second});
-        fieldNeigbours.insert({field.first, field.second-1});
-        fieldNeigbours.insert({field.first, field.second+1});
+        if(properInputFormat(std::pair<char,int>(field.first-1, field.second))) fieldNeighbours.insert({field.first-1, field.second});
+        if(properInputFormat(std::pair<char,int>(field.first+1, field.second))) fieldNeighbours.insert({field.first+1, field.second});
+        if(properInputFormat(std::pair<char,int>(field.first, field.second-1))) fieldNeighbours.insert({field.first, field.second-1});
+        if(properInputFormat(std::pair<char,int>(field.first, field.second+1))) fieldNeighbours.insert({field.first, field.second+1});
     }
-    /*
-     std::set<int> c = {1, 2, 3, 4, 5, 6, 7, 8, 9};
- 
-    // erase all odd numbers from c
-    for(auto it = c.begin(); it != c.end(); ) {
-        if(*it % 2 == 1)
-            it = c.erase(it);
-        else
-            ++it;
-    }
- 
-    for(int n : c) {
-        std::cout << n << ' ';
-    }
-    */
-    if(fields.size() > 1) 
+    
+    
+    if(coords_tmp.size() > 1) 
     {
-        auto firstField =  *(fields.begin());
-        auto secondField = *(std::next(fields.begin(),1));
+        auto firstField =  *(coords_tmp.begin());
+        auto secondField = *(std::next(coords_tmp.begin(),1));
+        fieldNeighbours.erase(firstField);
+        fieldNeighbours.erase(secondField);
         if(firstField.first == secondField.first)
         {
-            std::cout<<"Same column - remove fields from diff cols";
-            for(auto it = fieldNeigbours.begin(); it != fieldNeigbours.end(); )
+
+            for(auto it = fieldNeighbours.begin(); it != fieldNeighbours.end(); )
             {
-            
-                if((*it).first != firstField.first ) it = fieldNeigbours.erase(it);
+                if((*it).first != firstField.first ) it = fieldNeighbours.erase(it);
                 else ++it;
-       
             }
         }
        
         
         if(firstField.second == secondField.second)
         {
-            std::cout<<"Same row - remove fields from diff rows";
-            for(auto it = fieldNeigbours.begin(); it != fieldNeigbours.end(); )
+            for(auto it = fieldNeighbours.begin(); it != fieldNeighbours.end(); )
             {
-
-                if((*it).second != firstField.second) it = fieldNeigbours.erase(it);
+                if((*it).second != firstField.second) it = fieldNeighbours.erase(it);
                 else ++it;
-       
             }
         }
        
     }
-    
-    
-    auto it = std::find(fieldNeigbours.begin(), fieldNeigbours.end(), inputPair);
-    if(it != fieldNeigbours.end())
+    std::cout << "Neighbourfields size: "<< fieldNeighbours.size()<<":\n";
+    for(auto field :fieldNeighbours )
+    {
+        std::cout << "         "<<field.first << field.second << " \n";
+    }
+    if(fieldNeighbours.size() == 0)
+    {
+        std::cout<<"No more possible fields to place - erasing last placed fields!\n";
+        coords_tmp.clear();
+    }
+    auto it = std::find(fieldNeighbours.begin(), fieldNeighbours.end(), inputPair);
+    if(it != fieldNeighbours.end())
     {
         return true;
     }
