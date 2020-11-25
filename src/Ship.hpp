@@ -5,6 +5,11 @@
 #include <set>
 
 
+const int ASCII_CHAR_TO_INT(48);
+const int ASCII_INT_TO_LETTER(65);
+const int BOARD_SIZE(6);
+const int SHIP_SIZE(3);
+
 namespace BattleShips{
     
 class Ship

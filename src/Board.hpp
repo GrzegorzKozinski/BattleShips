@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Ship.hpp"
-#include "UsrCommunicator.hpp"
+
 
 
 namespace BattleShips{
@@ -16,8 +16,8 @@ class Board
 {
 private:
 
-    std::vector<std::vector<char>> board;
-    std::vector<Ship> ships;
+    std::vector<std::vector<char>> board_;
+    std::vector<Ship> ships_;
     std::vector<char> letters;
 
 public:
@@ -28,7 +28,10 @@ public:
     void boardView();
     void shipsSetup();
     void viaCommunicatorSetup();
-    std::vector<std::vector<char>> getBoard();
+    std::vector<Ship>& getShips();
+    
+    void setShips(std::vector<Ship>& ships);
+    std::vector<std::vector<char>>& getBoard();
 };
 
 

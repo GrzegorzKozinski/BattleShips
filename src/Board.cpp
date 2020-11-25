@@ -12,19 +12,11 @@ Board::Board()
 {
     
     for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_INT_TO_LETTER);
-    board.push_back(letters);
+    board_.push_back(letters);
+    
+    for(int i = 0; i < BOARD_SIZE; ++i) board_.push_back(std::vector<char>(BOARD_SIZE,' '));
     
     
-
-    for(int i = 0; i < BOARD_SIZE; ++i) board.push_back(std::vector<char>(BOARD_SIZE,' '));
-    
-    viaCommunicatorSetup();
-    
-    for(auto& ship : ships) // marks all its ships on board
-    {
-        ship.markPosition(board); 
-    }
-    boardView();
 
     std::cout<< "Board constructed \n";
 }
@@ -36,28 +28,32 @@ Board::~Board()
 
 void Board::viaCommunicatorSetup()
 {
-    std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
+    /* std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
 
     commPtr -> shipPlacementGuide(ships);
-    commPtr -> shipPlacementGuide(ships);
+    commPtr -> shipPlacementGuide(ships); */
     
+}
+std::vector<std::vector<char>>& Board::getBoard()
+{
+    return board_;
 }
 
 void Board::boardView()
 {
-    for(uint32_t i = 0; i < board.size(); ++i)
+    for(uint32_t i = 0; i < board_.size(); ++i)
     {
         
         std::cout  << i << " | ";
        
-        for (u_int32_t j = 0; j < board.at(0).size(); ++j)
+        for (u_int32_t j = 0; j < board_.at(0).size(); ++j)
         {    
-            std::cout << board.at(i).at(j) << " | ";
+            std::cout << board_.at(i).at(j) << " | ";
         }
         
         std::cout<< "\n--|";
 
-        for (u_int32_t j = 0; j < board.at(0).size(); ++j) 
+        for (u_int32_t j = 0; j < board_.at(0).size(); ++j) 
         {
             std::cout << "---|";
         }
@@ -66,16 +62,23 @@ void Board::boardView()
     }
 }
 
+
+
+std::vector<Ship>& Board::getShips()
+{
+    return ships_;
+}
+
 void Board::shipsSetup()
 {
     
     {   //manual ship setup
-        ships.emplace_back(std::set<std::pair<char, int>>{
+        ships_.emplace_back(std::set<std::pair<char, int>>{
         {'A', 1},
         {'A', 2},
         {'A', 3}});
 
-        ships.emplace_back(std::set<std::pair<char, int>>{
+        ships_.emplace_back(std::set<std::pair<char, int>>{
         {'C', 2},
         {'D', 2},
         {'E', 2},

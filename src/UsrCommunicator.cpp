@@ -2,9 +2,21 @@
 
 namespace BattleShips{
 
-UsrCommunicator::UsrCommunicator()
+UsrCommunicator::UsrCommunicator(Board* board) : board_(*board), ships(board_.getShips())
 {
+    //ships = board_.getShips();
     for(int i = 0; i < BOARD_SIZE; ++i)  letters.push_back(i + ASCII_INT_TO_LETTER);
+
+    shipPlacementGuide(ships);
+    
+    for(auto& ship : ships) // marks all its ships on board
+    {
+        ship.markPosition(board_.getBoard()); 
+    } 
+
+
+
+
     std::cout << "UsrCommunicator created!\n";
 }
 
@@ -42,7 +54,7 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
             std::cout << "Choose "<< coords_tmp.size() + 1 <<". field of your ship:\n ";
             std::getline(std::cin, input);
 
-        }while(properInputFormat(input, coords_tmp, ships) == false ); // field input chceck
+        }while(properInputFormat(input, coords_tmp) == false ); // field input chceck
 
         coords_tmp.insert(strToPair(input));
     }
@@ -67,6 +79,7 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
 }
 bool UsrCommunicator::properInputFormat(const std::pair<char, int>& inputPair)
 {
+    if(isTaken(ships, inputPair) == true) return false;
 
     auto it = std::find(letters.begin(), letters.end(), inputPair.first); //repeated code in overloaded method
     if(it == letters.end()) return false;
@@ -93,7 +106,7 @@ bool UsrCommunicator::properInputFormat(const std::string& input)
     return true;
 }
 
-bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp, std::vector<Ship>& ships)
+bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp)
 {
     bool fieldTaken = true;
     if(properInputFormat(input)  == false) return false;
@@ -165,7 +178,7 @@ bool UsrCommunicator::fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp,
     }
     
     
-    if(coords_tmp.size() > 1) 
+    if(coords_tmp.size() > 1) //erase not allowed fields  
     {
         auto firstField =  *(coords_tmp.begin());
         auto secondField = *(std::next(coords_tmp.begin(),1));

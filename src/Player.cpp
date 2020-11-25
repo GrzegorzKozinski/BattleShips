@@ -4,7 +4,9 @@ namespace BattleShips{
     
 Player::Player() 
 {
-    boardPtr = std::make_unique<Board>();
+    Board board;
+    commPtr = std::make_unique<UsrCommunicator>(&board);
+    board.boardView();
     std::cout << "Player created\n";
 }
 
