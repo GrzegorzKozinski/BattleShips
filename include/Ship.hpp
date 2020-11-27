@@ -1,8 +1,9 @@
 #pragma once
-
+#include <vector>
 #include <functional>
 #include <iostream>
 #include <set>
+#include <algorithm>
 
 
 const int ASCII_CHAR_TO_INT(48);

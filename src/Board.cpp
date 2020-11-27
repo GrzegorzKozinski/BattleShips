@@ -16,7 +16,6 @@ Board::Board()
     
     for(int i = 0; i < BOARD_SIZE; ++i) board_.push_back(std::vector<char>(BOARD_SIZE,' '));
     
-    
 
     std::cout<< "Board constructed \n";
 }
@@ -29,7 +28,6 @@ Board::~Board()
 void Board::viaCommunicatorSetup()
 {
     /* std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
-
     commPtr -> shipPlacementGuide(ships);
     commPtr -> shipPlacementGuide(ships); */
     

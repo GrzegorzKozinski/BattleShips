@@ -4,6 +4,7 @@
 #include "Board.hpp"
 #include "ICommunicator.hpp"
 #include<iterator>
+#include<algorithm>
 
 namespace BattleShips{
     
@@ -17,7 +18,7 @@ std::vector<char> letters;
 Board& board_;
 std::vector<Ship>& ships;
 public:
-    UsrCommunicator(Board* board);
+    UsrCommunicator(Board& board);
     ~UsrCommunicator();
 
     void shipPlacementGuide(std::vector<Ship>& ships) override;

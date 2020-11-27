@@ -2,11 +2,12 @@
 
 namespace BattleShips{
 
-UsrCommunicator::UsrCommunicator(Board* board) : board_(*board), ships(board_.getShips())
+UsrCommunicator::UsrCommunicator(Board& board) : board_(board), ships(board_.getShips())
 {
-    //ships = board_.getShips();
+    
     for(int i = 0; i < BOARD_SIZE; ++i)  letters.push_back(i + ASCII_INT_TO_LETTER);
 
+    shipPlacementGuide(ships);
     shipPlacementGuide(ships);
     
     for(auto& ship : ships) // marks all its ships on board
@@ -108,10 +109,10 @@ bool UsrCommunicator::properInputFormat(const std::string& input)
 
 bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp)
 {
-    bool fieldTaken = true;
-    if(properInputFormat(input)  == false) return false;
+    //bool fieldTaken = true;
+    if(properInputFormat(input) == false) return false;
     auto inputPair = strToPair(input);
-    if(isTaken(ships, inputPair) == true) return false;
+    //if(isTaken(ships, inputPair) == true) return false;
     
     switch (coords_tmp.size())
     {
@@ -125,8 +126,8 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
     {
     
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
-    auto first_coord = *coords_tmp.begin();
-    if(it == coords_tmp.end() && fieldNeighbour(coords_tmp, inputPair) == true)            
+    //auto first_coord = *coords_tmp.begin();
+    if(fieldNeighbour(coords_tmp, inputPair) == true && it == coords_tmp.end() )            
     {
         std::cout << "Field " << input << " OK\n";
         return true;
@@ -141,9 +142,9 @@ bool UsrCommunicator::properInputFormat(const std::string& input, std::set<std::
     {
     
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
-    auto first_coord = *coords_tmp.begin();
+    //auto first_coord = *coords_tmp.begin();
    
-    if(it == coords_tmp.end() && fieldNeighbour(coords_tmp, inputPair) == true)            
+    if(fieldNeighbour(coords_tmp, inputPair) == true && it == coords_tmp.end() )            
     {
         std::cout << "Field " << input << " OK\n";
         return true;
@@ -205,11 +206,7 @@ bool UsrCommunicator::fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp,
         }
        
     }
-    std::cout << "Neighbourfields size: "<< fieldNeighbours.size()<<":\n";
-    for(auto field :fieldNeighbours )
-    {
-        std::cout << "         "<<field.first << field.second << " \n";
-    }
+    
     if(fieldNeighbours.size() == 0)
     {
         std::cout<<"No more possible fields to place - erasing last placed fields!\n";
@@ -224,6 +221,7 @@ bool UsrCommunicator::fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp,
     {
         return false;
     }
+    return false;
 }
 
 

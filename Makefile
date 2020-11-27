@@ -1,45 +1,42 @@
-rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
-
-CC=g++
-FLAGS=-std=c++17
-OBJDIR=obj
-SRCDIR=src
-CPP = $(filter-out "", $(call rwildcard,$(SRCDIR),*.cpp))
-HPP = $(filter-out "", $(call rwildcard,$(SRCDIR),*.hpp))
-HPPDIR = $(sort $(dir $(HPP)))
-IDIRS=$(patsubst %, -I %, $(HPPDIR))
-OBJ = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(CPP:.cpp=.o))
-
-
-$(info CPP="$(CPP)")
+BUILDDIR ?= build
+COMPILE = g++ -O0 -std=c++14 -Igoogletest/googletest/include -Igoogletest/googlemock/include -Iinclude -Wall -Werror -Wno-unused-variable
+LINK = g++ -pthread
+SRC = $(wildcard */*.cpp) $(wildcard */*/*.cpp)
+OBJ = $(addprefix $(BUILDDIR)/obj/,$(SRC:%=%.o))
 
 ifeq ($(OS), Windows_NT)
-	MKDIR = mkdir $(OBJDIR)
-	RMDIR = rmdir /s /q $(OBJDIR) 
+	MKDIR = mkdir $(BUILDDIR)
+	RMDIR = rmdir /s /q $(BUILDDIR) 
 else
-	MKDIR = mkdir -p $(OBJDIR)
-	RMDIR = rm -rf $(OBJDIR) 
+	MKDIR = mkdir -p $(BUILDDIR)
+	RMDIR = rm -rf $(BUILDDIR) 
 endif
 
-all: $(OBJDIR)/exec
+all: $(BUILDDIR)/ut app
 
-DEPENDENCIES := $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(CPP:.cpp=.d))
--include $(DEPENDENCIES)
+ut: $(BUILDDIR)/ut
+	$(BUILDDIR)/ut
 
-directory:
-	$(MKDIR)
-
-$(OBJDIR)/exec: $(OBJ) | directory
-	$(CC) $(FLAGS) -o $@ $^
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | directory
-	$(CC) $(FLAGS) $(IDIRS) -c $< -o $@
-	$(CC) $(FLAGS) $(IDIRS) -MP -MM -MT $@ -MF $(@:.o=.d) $<
-
-run:
-	$(OBJDIR)/exec
+app: $(BUILDDIR)/app
 
 clean:
 	$(RMDIR)
+	
+$(BUILDDIR)/ut: $(BUILDDIR)/obj/googletest.o $(BUILDDIR)/obj/googlemock.o $(filter-out $(BUILDDIR)/obj/app/%,$(OBJ))
+	$(LINK) $^ -o $@
 
-.PHONY: clean all directory
+$(BUILDDIR)/app: $(filter-out $(BUILDDIR)/obj/uts/%,$(OBJ))
+	$(LINK) $^ -o $@
+
+$(BUILDDIR)/obj/%.cpp.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(COMPILE) -MMD -c $< -o $@
+
+$(BUILDDIR)/obj/google%.o: googletest/google%
+	@mkdir -p $(dir $@)
+	$(COMPILE) $(addprefix -I, $(wildcard googletest/google*)) -MMD -c $</src/*-all.cc -o $@
+
+-include $(OBJ:%.o=%.d)
+
+%.hpp:
+	@echo no $@
