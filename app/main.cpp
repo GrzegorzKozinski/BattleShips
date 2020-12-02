@@ -1,5 +1,5 @@
-#include "../src/Player.hpp"
-#include "../src/Square.hpp"
+#include "../include/Player.hpp"
+#include "../include/Square.hpp"
 
 
 

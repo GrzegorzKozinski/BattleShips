@@ -26,7 +26,7 @@ public:
     ~Ship();
 
     unsigned int getShipId() const;
-    void setShipId(unsigned int& id);
+    void setShipId(unsigned int id);
     std::set<std::pair<char, int>> getCoords() const;
     void setCoord(std::pair<char, int>& coord);
     void printCoords();

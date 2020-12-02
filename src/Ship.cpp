@@ -22,7 +22,7 @@ Ship::~Ship()
     std::cout << "Ship #"<<getShipId()<< " destroyed \n";
 }
 
-void Ship::setShipId(unsigned int& id)
+void Ship::setShipId(unsigned int id)
 {
     shipId = id;
 }

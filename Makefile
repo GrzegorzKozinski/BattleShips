@@ -1,5 +1,5 @@
 BUILDDIR ?= build
-COMPILE = g++ -O0 -std=c++14 -Igoogletest/googletest/include -Igoogletest/googlemock/include -Iinclude -Wall -Werror -Wno-unused-variable
+COMPILE = g++ -O0 -std=c++17 -Igoogletest/googletest/include -Igoogletest/googlemock/include -Iinclude -Wall -Werror -Wno-unused-variable
 LINK = g++ -pthread
 SRC = $(wildcard */*.cpp) $(wildcard */*/*.cpp)
 OBJ = $(addprefix $(BUILDDIR)/obj/,$(SRC:%=%.o))
@@ -15,7 +15,8 @@ endif
 all: $(BUILDDIR)/ut app
 
 ut: $(BUILDDIR)/ut
-	$(BUILDDIR)/ut
+
+run: ./build/app
 
 app: $(BUILDDIR)/app
 

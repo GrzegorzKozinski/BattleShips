@@ -14,10 +14,6 @@ UsrCommunicator::UsrCommunicator(Board& board) : board_(board), ships(board_.get
     {
         ship.markPosition(board_.getBoard()); 
     } 
-
-
-
-
     std::cout << "UsrCommunicator created!\n";
 }
 
@@ -47,7 +43,7 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
     std::string input;
    
     std::set<std::pair<char, int>> coords_tmp;
-    //int i = 0;
+    
     while(coords_tmp.size() < SHIP_SIZE)
     {
         do
@@ -59,22 +55,6 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
 
         coords_tmp.insert(strToPair(input));
     }
-
-    /* do
-    {
-        std::cout << "Choose 2. field of your ship:\n ";
-        std::getline(std::cin, input);
-        
-    }while(properInputFormat(input, coords_tmp, ships) == false ); //second field input chceck
-    coords_tmp.insert(strToPair(input));
-    do
-    {
-        std::cout << "Choose 3. field of your ship:\n ";
-        std::getline(std::cin, input);
-        
-    }while(properInputFormat(input, coords_tmp, ships) == false ); //third field input chceck
-    coords_tmp.insert(strToPair(input)); */
-
     ships.emplace_back(coords_tmp);
 
 }

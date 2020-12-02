@@ -1,4 +1,4 @@
-#include "../src/Square.hpp"
+#include "../include/Square.hpp"
 #include "gtest/gtest.h"
  
 TEST(SquareRootTest, PositiveNos) 
