@@ -9,9 +9,6 @@
 
 namespace BattleShips{
 
-//const int BOARD_SIZE(6);
-
-//const int ASCII_INT_TO_LETTER(65);
 
 class Player
 {
