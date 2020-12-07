@@ -27,7 +27,7 @@ public:
 
     void boardView();
     void shipsSetup();
-    void viaCommunicatorSetup();
+    
     std::vector<Ship>& getShips();
     
     void setShips(std::vector<Ship>& ships);

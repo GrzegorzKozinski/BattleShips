@@ -3,7 +3,7 @@
 
 #include "Board.hpp"
 #include "ICommunicator.hpp"
-#include "Formatter.hpp"
+
 #include <iterator>
 #include <algorithm>
 
@@ -27,10 +27,8 @@ public:
 
     void shipPlacementGuide(std::vector<Ship>& ships) override;
 
-    //std::pair<char, int> strToPair(const std::string& str);
-   
     bool addField(const std::string& input, std::set<std::pair<char, int>>& coords_tmp);
-   
+    bool isTaken(std::vector<std::vector<char>>& board, const std::string& str) const;
     
    
 };

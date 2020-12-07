@@ -25,13 +25,6 @@ Board::~Board()
     std::cout<< "Board destroyed \n";
 }
 
-void Board::viaCommunicatorSetup()
-{
-    /* std::unique_ptr<UsrCommunicator> commPtr = std::make_unique<UsrCommunicator>();
-    commPtr -> shipPlacementGuide(ships);
-    commPtr -> shipPlacementGuide(ships); */
-    
-}
 std::vector<std::vector<char>>& Board::getBoard()
 {
     return board_;

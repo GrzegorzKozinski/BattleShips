@@ -1,10 +1,12 @@
 #pragma once
+
 #include "Ship.hpp"
 
 #include <utility>
 #include <iostream>
 #include <set>
 #include <algorithm>
+
 
 
 
@@ -27,6 +29,6 @@ public:
     bool properInputFormat(const std::string& input, std::set<std::pair<char, int>>& coords_tmp);
 
     bool fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp, std::pair<char, int>& input);
-    bool isTaken(std::vector<Ship>& ships, const std::pair<char, int>& input) const;
+    
 };
 } // namespace BattleShips

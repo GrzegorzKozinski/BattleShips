@@ -15,7 +15,7 @@ std::pair<char, int> Formatter::strToPair(const std::string& str)
 
 bool Formatter::properInputFormat(const std::pair<char, int>& inputPair)
 {
-    //if(isTaken(ships, inputPair) == true) return false;
+  
 
     auto it = std::find(letters.begin(), letters.end(), inputPair.first); //repeated code in overloaded method
     if(it == letters.end()) return false;
@@ -45,13 +45,14 @@ bool Formatter::properInputFormat(const std::string& input, std::set<std::pair<c
 {
     
     if(properInputFormat(input) == false) return false;
+   
     auto inputPair = strToPair(input);
    
     switch (coords_tmp.size())
     {
     case (0):
     {
-        std::cout << "Field " << input << " OK\n";
+        //std::cout << "Field " << input << " OK\n";
         return true;
     }
 
@@ -75,7 +76,6 @@ bool Formatter::properInputFormat(const std::string& input, std::set<std::pair<c
     {
     
     auto it = std::find(coords_tmp.begin(), coords_tmp.end(), inputPair);
-    //auto first_coord = *coords_tmp.begin();
    
     if(fieldNeighbour(coords_tmp, inputPair) == true && it == coords_tmp.end() )            
     {
@@ -162,14 +162,6 @@ bool Formatter::fieldNeighbour(std::set<std::pair<char, int>>& coords_tmp, std::
     return false;
 }
 
-bool Formatter::isTaken(std::vector<Ship>& ships, const std::pair<char, int>& input) const
-{
-    for(auto& ship : ships)
-    {
-        if(ship.isFiledOnCoords(input)) return true; 
-    }
-    return false;
-} 
    
     
 }// namespace BattleShips

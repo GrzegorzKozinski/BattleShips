@@ -6,15 +6,16 @@ UsrCommunicator::UsrCommunicator(Board& board) : board_(board), ships(board_.get
 {
     formatter = std::make_unique<Formatter>();
    
+    shipPlacementGuide(ships);
+    ships.back().markPosition(board_.getBoard());
+    ships.back().surroundPosition(board_.getBoard());
+   
+    board_.boardView();
 
     shipPlacementGuide(ships);
-    shipPlacementGuide(ships);
-    
-    for(auto& ship : ships) // marks all its ships on board
-    {
-        ship.markPosition(board_.getBoard()); 
-        ship.surroundPosition(board_.getBoard());
-    } 
+    ships.back().markPosition(board_.getBoard());
+    ships.back().surroundPosition(board_.getBoard());
+
     std::cout << "UsrCommunicator created!\n";
 }
 
@@ -23,11 +24,6 @@ UsrCommunicator::~UsrCommunicator()
     std::cout << "UsrCommunicator destroyed!\n";
 }
 
-/* std::pair<char, int> UsrCommunicator::strToPair(const std::string& str)
-{
-    std::pair<char, int> p(str.at(0), str.at(1)-ASCII_CHAR_TO_INT);
-    return p;
-} */
 
 void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
 {   
@@ -41,8 +37,9 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
         {
             std::cout << "Choose "<< coords_tmp.size() + 1 <<". field of your ship:\n ";
             std::getline(std::cin, input);
+            
 
-        }while(formatter->properInputFormat(input, coords_tmp) == false ); // field input chceck
+        }while(formatter->properInputFormat(input, coords_tmp) == false || isTaken(board_.getBoard(), input) == true ); // field input chceck
 
         coords_tmp.insert(formatter -> strToPair(input));
     }
@@ -52,7 +49,19 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
 
 }
 
-
+bool UsrCommunicator::isTaken(std::vector<std::vector<char>>& board, const std::string& str) const
+{
+    int row,col;
+    row = str.at(0) - ASCII_INT_TO_LETTER;
+    col = str.at(1) - ASCII_CHAR_TO_INT;
+    
+    if(board.at(col).at(row) != ' ')
+    {
+        std::cout<<"Field is not empty!\n";
+        return true;
+    }
+    return false;
+} 
 
 
 

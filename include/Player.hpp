@@ -3,9 +3,9 @@
 #include <iostream>
 #include <memory>
 
-#include "UsrCommunicator.hpp"
-#include "Board.hpp"
+#include "ICommunicator.hpp"
 
+#include "UsrCommunicator.hpp"
 
 namespace BattleShips{
 
@@ -14,7 +14,7 @@ class Player
 {
 private:
     std::unique_ptr<Board> boardPtr;
-    std::unique_ptr<UsrCommunicator> commPtr;
+    std::unique_ptr<ICommunicator> commPtr;
 public:
     Player();
     ~Player();
