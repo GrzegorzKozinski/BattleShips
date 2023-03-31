@@ -2,78 +2,62 @@
 
 #include <vector>
 #include <iostream>
-
 #include <memory>
 #include <set>
 
-namespace BattleShips{
-
-Board::Board()
+namespace BattleShips
 {
-    
-    for(int i = 0; i < BOARD_SIZE; ++i) letters.push_back(i + ASCII_INT_TO_LETTER);
-    board_.push_back(letters);
-    
-    for(int i = 0; i < BOARD_SIZE; ++i) board_.push_back(std::vector<char>(BOARD_SIZE,' '));
-    
 
-    std::cout<< "Board constructed \n";
-}
-
-Board::~Board()
-{
-    std::cout<< "Board destroyed \n";
-}
-
-std::vector<std::vector<char>>& Board::getBoard()
-{
-    return board_;
-}
-
-void Board::boardView()
-{
-    for(uint32_t i = 0; i < board_.size(); ++i)
+    Board::Board() 
     {
-        
-        std::cout  << i << " | ";
-       
-        for (u_int32_t j = 0; j < board_.at(0).size(); ++j)
-        {    
-            std::cout << board_.at(i).at(j) << " | ";
-        }
-        
-        std::cout<< "\n--|";
+        clear();
+        std::cout << "Board constructed \n";
+    }
 
-        for (u_int32_t j = 0; j < board_.at(0).size(); ++j) 
+    Board::~Board()
+    {
+        std::cout << "Board destroyed \n";
+    }
+
+    Fields Board::getFields() const
+    {
+        return fields_;
+    }
+
+    void Board::clear()
+    {
+        for (uint64_t col{0}; col < fields_.size(); ++col)
         {
-            std::cout << "---|";
+            fields_[col].fill(EField::EMPTY); // fill board with empty fields
         }
-
-        std::cout<< "\n";
     }
-}
 
-
-
-std::vector<Ship>& Board::getShips()
-{
-    return ships_;
-}
-
-void Board::shipsSetup()
-{
-    
-    {   //manual ship setup
-        ships_.emplace_back(std::set<std::pair<char, int>>{
-        {'A', 1},
-        {'A', 2},
-        {'A', 3}});
-
-        ships_.emplace_back(std::set<std::pair<char, int>>{
-        {'C', 2},
-        {'D', 2},
-        {'E', 2},
-        {'F', 2}});
+    EField Board::getField(const Coordinate &coordinate) const
+    {
+        const auto idx{coordinate.getIndices()};
+        printf("getField: letterIdx is %d digitIdx is %d \n", idx.first, idx.second);
+        // printf("getField: board at this has value: %s \n", GlobalSettings::toString(fields_[idx.first][idx.second]));
+        return fields_[idx.first][idx.second]; // to test thiws method
     }
-}
+
+    EField &Board::getFieldRef(const Coordinate &coordinate) const
+    {
+        const auto idx{coordinate.getIndices()};
+        return fields_[idx.first][idx.second];
+    }
+
+    void Board::printBoard() const // pretty print board
+    {
+        settings_.printHeader();
+        for (uint64_t i = 0; i < fields_.size(); ++i)
+        {
+            std::cout << i + 1 << " | ";
+            for (uint64_t j = 0; j < fields_.at(0).size(); ++j)
+            {
+                std::cout << fields_.at(j).at(i) << " | ";
+            }
+            GlobalSettings::print_dashed_row();
+        }
+    }
+
 } // namespace BattleShips

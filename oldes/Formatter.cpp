@@ -1,15 +1,15 @@
-#include "Formatter.hpp"
+// #include "Formatter.hpp"
 
 namespace BattleShips{
 
 Formatter::Formatter()
 {
-    for(int i = 0; i < BOARD_SIZE; ++i)  letters.push_back(i + ASCII_INT_TO_LETTER);
+    for(int i = 0; i < boardSize; ++i)  letters.push_back(i + asciiIntToChar);
 }
 
 std::pair<char, int> Formatter::strToPair(const std::string& str)
 {
-    std::pair<char, int> p(str.at(0), str.at(1)-ASCII_CHAR_TO_INT);
+    std::pair<char, int> p(str.at(0), str.at(1)-asciiCharToInt);
     return p;
 }
 
@@ -20,7 +20,7 @@ bool Formatter::properInputFormat(const std::pair<char, int>& inputPair)
     auto it = std::find(letters.begin(), letters.end(), inputPair.first); //repeated code in overloaded method
     if(it == letters.end()) return false;
 
-    if((inputPair.second < 1) || (inputPair.second > BOARD_SIZE )) //repeated code in overloaded method
+    if((inputPair.second < 1) || (inputPair.second > boardSize )) //repeated code in overloaded method
     {
         return false;
     }
@@ -34,7 +34,7 @@ bool Formatter::properInputFormat(const std::string& input)
     auto it = std::find(letters.begin(), letters.end(), input.at(0)); //repeated code in overloaded method
     if(it == letters.end()) return false;
 
-    if((input.at(1) - ASCII_CHAR_TO_INT) < 1 || (input.at(1) - ASCII_CHAR_TO_INT)  > BOARD_SIZE ) //repeated code in overloaded method
+    if((input.at(1) - asciiCharToInt) < 1 || (input.at(1) - asciiCharToInt)  > boardSize ) //repeated code in overloaded method
     {
         return false;
     }

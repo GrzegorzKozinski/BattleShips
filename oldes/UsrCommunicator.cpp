@@ -2,22 +2,22 @@
 
 namespace BattleShips{
 
-UsrCommunicator::UsrCommunicator(Board& board) : board_(board), ships(board_.getShips())
-{
-    formatter = std::make_unique<Formatter>();
+// UsrCommunicator::UsrCommunicator(Board& board) : m_fields(board), ships(m_fields.getShips())
+// {
+//     formatter = std::make_unique<Formatter>();
    
-    shipPlacementGuide(ships);
-    ships.back().markPosition(board_.getBoard());
-    ships.back().surroundPosition(board_.getBoard());
+//     shipPlacementGuide(ships);
+//     ships.back().markPosition(m_fields.getFields());
+//     ships.back().surroundPosition(m_fields.getFields());
    
-    board_.boardView();
+//     m_fields.printBoard();
 
-    shipPlacementGuide(ships);
-    ships.back().markPosition(board_.getBoard());
-    ships.back().surroundPosition(board_.getBoard());
+//     shipPlacementGuide(ships);
+//     ships.back().markPosition(m_fields.getFields());
+//     ships.back().surroundPosition(m_fields.getFields());
 
-    std::cout << "UsrCommunicator created!\n";
-}
+//     std::cout << "UsrCommunicator created!\n";
+// }
 
 UsrCommunicator::~UsrCommunicator()
 {
@@ -35,11 +35,12 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
     {
         do
         {
+            
             std::cout << "Choose "<< coords_tmp.size() + 1 <<". field of your ship:\n ";
             std::getline(std::cin, input);
             
-
-        }while(formatter->properInputFormat(input, coords_tmp) == false || isTaken(board_.getBoard(), input) == true ); // field input chceck
+        }while(formatter->properInputFormat(input, coords_tmp) == false ); // field input chceck
+        // }while(formatter->properInputFormat(input, coords_tmp) == false || isTaken(m_fields.getFields(), input) == true ); // field input chceck
 
         coords_tmp.insert(formatter -> strToPair(input));
     }
@@ -52,8 +53,8 @@ void UsrCommunicator::shipPlacementGuide(std::vector<Ship>& ships)
 bool UsrCommunicator::isTaken(std::vector<std::vector<char>>& board, const std::string& str) const
 {
     int row,col;
-    row = str.at(0) - ASCII_INT_TO_LETTER;
-    col = str.at(1) - ASCII_CHAR_TO_INT;
+    row = str.at(0) - asciiIntToChar;
+    col = str.at(1) - asciiCharToInt;
     
     if(board.at(col).at(row) != ' ')
     {

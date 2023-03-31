@@ -1,43 +1,26 @@
-BUILDDIR ?= build
-COMPILE = g++ -O0 -std=c++17 -Igoogletest/googletest/include -Igoogletest/googlemock/include -Iinclude -Wall -Werror -Wno-unused-variable
-LINK = g++ -pthread
-SRC = $(wildcard */*.cpp) $(wildcard */*/*.cpp)
-OBJ = $(addprefix $(BUILDDIR)/obj/,$(SRC:%=%.o))
+SRC_DIR := src
+CPP_FILES := $(wildcard $(SRC_DIR)/*.cpp)
+HPP_FILES := $(wildcard $(SRC_DIR)/*.hpp)
+OBJ_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
+LD_FLAGS :=
+CC_FLAGS := -Wall -Wextra -pedantic -std=c++17
+UT_FLAGS := -I googletest/googletest/include 
+GTEST_LIB := googletest/build/lib/libgtest.a -lpthread
 
-ifeq ($(OS), Windows_NT)
-	MKDIR = mkdir $(BUILDDIR)
-	RMDIR = rmdir /s /q $(BUILDDIR) 
-else
-	MKDIR = mkdir -p $(BUILDDIR)
-	RMDIR = rm -rf $(BUILDDIR) 
-endif
+EXECUTABLE := my_program
 
-all: $(BUILDDIR)/ut app
+all: $(EXECUTABLE) ut
 
-ut: $(BUILDDIR)/ut
+$(EXECUTABLE): $(OBJ_FILES)
+	g++ $(LD_FLAGS) -o $@ $^
 
-run: ./build/app
+obj/%.o: $(SRC_DIR)/%.cpp $(HPP_FILES)
+	g++ $(CC_FLAGS) -c -o $@ $<
 
-app: $(BUILDDIR)/app
+ut: uts/ut.cpp $(CPP_FILES) $(HPP_FILES)
+	g++ $(CC_FLAGS) $(UT_FLAGS) -o $@ $< $(GTEST_LIB)
+
+.PHONY: clean
 
 clean:
-	$(RMDIR)
-	
-$(BUILDDIR)/ut: $(BUILDDIR)/obj/googletest.o $(BUILDDIR)/obj/googlemock.o $(filter-out $(BUILDDIR)/obj/app/%,$(OBJ))
-	$(LINK) $^ -o $@
-
-$(BUILDDIR)/app: $(filter-out $(BUILDDIR)/obj/uts/%,$(OBJ))
-	$(LINK) $^ -o $@
-
-$(BUILDDIR)/obj/%.cpp.o: %.cpp
-	@mkdir -p $(dir $@)
-	$(COMPILE) -MMD -c $< -o $@
-
-$(BUILDDIR)/obj/google%.o: googletest/google%
-	@mkdir -p $(dir $@)
-	$(COMPILE) $(addprefix -I, $(wildcard googletest/google*)) -MMD -c $</src/*-all.cc -o $@
-
--include $(OBJ:%.o=%.d)
-
-%.hpp:
-	@echo no $@
+	rm -f $(EXECUTABLE) $(OBJ_FILES) ut

@@ -7,16 +7,12 @@
 #include <set>
 #include <algorithm>
 
-
-
-
-
 namespace BattleShips{
 
 class Formatter
 {
 private:
-std::vector<char> letters;
+
 
 public:
     Formatter();
