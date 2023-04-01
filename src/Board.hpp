@@ -39,6 +39,5 @@ public:
 private:
     GlobalSettings settings_;
     mutable Fields fields_{}; // board as  collection of Fields
-    // std::vector<Ship> ships_;
 };
 } // namespace BattleShips

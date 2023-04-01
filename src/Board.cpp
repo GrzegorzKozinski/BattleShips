@@ -36,7 +36,6 @@ namespace BattleShips
     {
         const auto idx{coordinate.getIndices()};
         printf("getField: letterIdx is %d digitIdx is %d \n", idx.first, idx.second);
-        // printf("getField: board at this has value: %s \n", GlobalSettings::toString(fields_[idx.first][idx.second]));
         return fields_[idx.first][idx.second]; // to test thiws method
     }
 

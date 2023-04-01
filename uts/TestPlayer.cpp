@@ -7,14 +7,22 @@
 
 using namespace BattleShips;
 
-class TestPlayer : public ::testing::Test 
+class TestPlayer : public ::testing::Test
 {
 protected:
+    void expectNeighbourFieldsWhen1stFieldPlaced(const Coordinate &firstField, const std::set<Coordinate> &expectedSet) const
+    {
+        const std::set<Coordinate> result{player.getNextPossibleFields(firstField)};
+        EXPECT_EQ(expectedSet.size(), result.size());
+        EXPECT_EQ(result, expectedSet);
+    }
     Player player;
+    static constexpr char lastLetter{'A' + general::boardSize - 1};
+    static constexpr int lastDigit{general::boardSize};
+    
 };
 
-
-TEST_F(TestPlayer, getNewShipCoordsUserInputCheck) 
+TEST_F(TestPlayer, getNewShipCoordsUserInputCheck)
 {
     // Set up test input
     const std::istringstream input("A1\nA2\nA3\n");
@@ -22,7 +30,7 @@ TEST_F(TestPlayer, getNewShipCoordsUserInputCheck)
     auto cin_backup = std::cin.rdbuf();
     std::cin.rdbuf(input.rdbuf());
 
-    std::set<Coordinate> inputCoords { player.getNewShipCoords() };
+    std::set<Coordinate> inputCoords{player.getNewShipCoords()};
     std::cin.rdbuf(cin_backup);
 
     ASSERT_EQ(inputCoords.size(), 3u);
@@ -31,47 +39,21 @@ TEST_F(TestPlayer, getNewShipCoordsUserInputCheck)
 
 TEST_F(TestPlayer, getNextPossibleFields_2ndFieldWhenAllDirectionsFree) // expect calls after sorting methods as private and public
 {
-    const Coordinate firstCoord('B', 2);
-    const uint64_t setSizeWhenAllDirectionsFree{4};
-    const std::set<Coordinate> expectedSet{Coordinate('B', 1), Coordinate('A', 2), Coordinate('B', 3), Coordinate('C', 2)};
-    const std::set<Coordinate> result {player.getNextPossibleFields(firstCoord)};
-    EXPECT_TRUE(result.size() == setSizeWhenAllDirectionsFree);
-    EXPECT_EQ(result, expectedSet);
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('B', 2), {Coordinate('B', 1), Coordinate('A', 2), Coordinate('B', 3), Coordinate('C', 2)});
+}
+// new possible fields are more like board responsibility?
+TEST_F(TestPlayer, getNextPossibleFields_1stFieldIsCorner)
+{
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('A', 1), {Coordinate('A', 2), Coordinate('B', 1)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate(lastLetter, 1), {Coordinate(lastLetter - 1, 1), Coordinate(lastLetter, 2)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate(lastLetter, lastDigit), {Coordinate(lastLetter, lastDigit - 1), Coordinate(lastLetter - 1, lastDigit)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('A', lastDigit), {Coordinate('A', lastDigit - 1), Coordinate('B', lastDigit)});
 }
 
-TEST_F(TestPlayer, getNextPossibleFields_1stFieldIsCorner) // extract some corner check for DRY rule 
-                                                           // new possible fields are more like board responsibility
+TEST_F(TestPlayer, getNextPossibleFields_1stFieldNearTheWall)
 {
-    Coordinate firstCoord('A', 1);
-    std::set<Coordinate> expectedSet{Coordinate('A', 2), Coordinate('B', 1)};
-    const uint64_t sizeWhen1stFieldPlacedInCorner{2};
-
-    std::set<Coordinate> result {player.getNextPossibleFields(firstCoord)};
-    ASSERT_TRUE(result.size() == sizeWhen1stFieldPlacedInCorner);
-    EXPECT_EQ(result, expectedSet);
-
-    firstCoord.letter = player.settings_.lastLetter();
-    
-    std::set<Coordinate> expectedSet2{Coordinate('D', 1), Coordinate('E', 2)};
-    result = player.getNextPossibleFields(firstCoord);
-
-    ASSERT_TRUE(result.size() == sizeWhen1stFieldPlacedInCorner);
-    EXPECT_EQ(result, expectedSet2);
-
-    firstCoord.digit = general::boardSize;
-    
-    std::cout << firstCoord << std::endl;
-    const std::set<Coordinate> expectedSet3{Coordinate('E', 4), Coordinate('D', 5)};
-    result = player.getNextPossibleFields(firstCoord);
-   
-    EXPECT_EQ(result, expectedSet3);
-    ASSERT_TRUE(result.size() == sizeWhen1stFieldPlacedInCorner);
-
-    firstCoord.letter = 'A';
-
-    const std::set<Coordinate> expectedSet4{Coordinate('A', 4), Coordinate('B', 5)};
-    result = player.getNextPossibleFields(firstCoord);
-   
-    EXPECT_EQ(result, expectedSet4);
-    ASSERT_TRUE(result.size() == sizeWhen1stFieldPlacedInCorner);
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('A', 3), {Coordinate('A', 2), Coordinate('A', 4), Coordinate('B', 3)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('C', 1), {Coordinate('B', 1), Coordinate('D', 1), Coordinate('C', 2)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate(lastLetter, 3), {Coordinate(lastLetter, 2), Coordinate(lastLetter, 4), Coordinate(lastLetter-1, 3)});
+    expectNeighbourFieldsWhen1stFieldPlaced(Coordinate('C', lastDigit), {Coordinate('B', lastDigit), Coordinate('D', lastDigit), Coordinate('C', 4)});
 }
