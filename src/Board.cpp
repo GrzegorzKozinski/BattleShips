@@ -39,7 +39,7 @@ namespace BattleShips
         return fields_[idx.first][idx.second]; // to test thiws method
     }
 
-    EField &Board::getFieldRef(const Coordinate &coordinate) const
+    EField& Board::getFieldRef(const Coordinate &coordinate) const
     {
         const auto idx{coordinate.getIndices()};
         return fields_[idx.first][idx.second];

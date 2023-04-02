@@ -3,7 +3,7 @@
 namespace BattleShips{
 
 template<class T>
-void GlobalSettings::print(const T& container)
+void GlobalSettings::print(const T& container) const
 {
     std::for_each(container.begin(), container.end(),
         [](const typename T::value_type& element){ std::cout << element << " ";});
@@ -76,7 +76,7 @@ bool GlobalSettings::isBadInput(const std::string& input) const
         }
         return false;
     }
-    std::cout <<"Bad input length\n"; 
+    std::cout <<"Bad input length (" << input.size() << ")\n"; 
     return true;
 }
 
@@ -104,9 +104,7 @@ uint8_t GlobalSettings::indexOf(const char c) const
     std::cout << "indexOf: char to find: "  << c << "\n";
     auto itr = std::find(letters.begin(), letters.end(), c);
     return std::distance(letters.begin(), itr); // simpler and letter should already be checked during user input validation
-    // return itr != letters.end() ? std::distance(letters.begin(), itr) : std::numeric_limits<uint8_t>::max(); safer
 }
-
 bool GlobalSettings::isFieldInLine(const Coordinate& newCoord, const std::set<Coordinate>& set) const
 {
     if(set.size() == 0 ) return true;
