@@ -45,14 +45,6 @@ void Ship::printCoords() const
     std::cout << " ]\n";
 }
 
-// void Ship::markPosition(std::vector<std::vector<char>>& board)
-// {
-//     // for(const auto& coord : getCoords()) 
-//     // {     
-//     //     board.at(coord.second).at(coord.first-65) = 'X';
-//     // }
-// }
-
 bool Ship::isFiledOnCoords(const Coordinate& p ) const
 {   
     return std::find(coords_.begin(), coords_.end(), p) != coords_.end();

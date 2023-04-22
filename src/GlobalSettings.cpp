@@ -1,3 +1,5 @@
+#include <string>
+#include "Logger.hpp"
 #include "GlobalSettings.hpp"
 
 namespace BattleShips{
@@ -93,8 +95,8 @@ Coordinate GlobalSettings::getFieldFromUser() const
     }
     while(isBadInput(userInput));
     c.letter = userInput[0];
-    c.digit = (userInput[1] - general::asciiCharToInt);
-    std::cout << "Filed taken: \n";
+    c.digit = std::stoi(userInput.substr(1));
+    log("GlobalSettings: coordinate is ", c.letter, c.digit);
     return c;
 }
 
@@ -102,23 +104,23 @@ Coordinate GlobalSettings::getFieldFromUser() const
 uint8_t GlobalSettings::indexOf(const char c) const
 {
     std::cout << "indexOf: char to find: "  << c << "\n";
-    auto itr = std::find(letters.begin(), letters.end(), c);
+    const auto itr = std::find(letters.begin(), letters.end(), c);
     return std::distance(letters.begin(), itr); // simpler and letter should already be checked during user input validation
 }
-bool GlobalSettings::isFieldInLine(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-{
-    if(set.size() == 0 ) return true;
-    return isAlingnedHorizantally(newCoord, set) or isAlignedVertically(newCoord, set);
-}
+// bool GlobalSettings::isFieldInLine(const Coordinate& newCoord, const std::set<Coordinate>& set) const
+// {
+//     if(set.size() == 0 ) return true;
+//     return isAlingnedHorizantally(newCoord, set) or isAlignedVertically(newCoord, set);
+// }
 
-bool GlobalSettings::isAlingnedHorizantally(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-{
-    return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.letter == newCoord.letter;});
-}
-bool GlobalSettings::isAlignedVertically(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-{
-    return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.digit == newCoord.digit;});
-}
+// bool GlobalSettings::isAlingnedHorizantally(const Coordinate& newCoord, const std::set<Coordinate>& set) const
+// {
+//     return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.letter == newCoord.letter;});
+// }
+// bool GlobalSettings::isAlignedVertically(const Coordinate& newCoord, const std::set<Coordinate>& set) const
+// {
+//     return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.digit == newCoord.digit;});
+// }
 char GlobalSettings::lastLetter() const
 {
     return letters.back();

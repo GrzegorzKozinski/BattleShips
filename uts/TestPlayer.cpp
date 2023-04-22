@@ -19,7 +19,7 @@ protected:
 
     Player player;
     static constexpr char lastLetter{'A' + general::boardSize - 1};
-    static constexpr int lastDigit{general::boardSize};
+    static constexpr int  lastDigit {general::boardSize};
     const Coordinate corner1{'A', 1}, corner2{lastLetter, 1} , corner3{lastLetter, lastDigit} , corner4{'A', lastDigit} ;
 };
 
@@ -28,6 +28,21 @@ TEST_F(TestPlayer, getShipOfSize3CoordsUserInputCheck)
     // Set up test input
     const std::istringstream input("A1\nA2\nA3\n");
     const std::set<Coordinate> expectedCoords{Coordinate('A', 1), Coordinate('A', 2), Coordinate('A', 3)};
+    auto cin_backup = std::cin.rdbuf();
+
+    std::cin.rdbuf(input.rdbuf());
+    std::set<Coordinate> inputCoords{player.getNewShipCoords()};
+
+    std::cin.rdbuf(cin_backup);
+    ASSERT_EQ(inputCoords.size(), 3u);
+    EXPECT_EQ(inputCoords, expectedCoords);
+}
+
+TEST_F(TestPlayer, getShipOfSize3CoordsUserInputCheckHorizontal)
+{
+    // Set up test input
+    const std::istringstream input("B2\nC2\nD2\n");
+    const std::set<Coordinate> expectedCoords{Coordinate('B', 2), Coordinate('C', 2), Coordinate('D', 2)};
     auto cin_backup = std::cin.rdbuf();
 
     std::cin.rdbuf(input.rdbuf());
@@ -85,9 +100,9 @@ TEST_F(TestPlayer, getNextPossibleFields_3FieldsPlacedWithCorners)
     std::set<Coordinate> ship{corner1, Coordinate('A', 2), Coordinate('A', 3)};
     expectNeighbourFields(ship, {Coordinate('A', 4)});
 
-    ship = {corner1, Coordinate('B', 1), Coordinate('C', 1)};
+    ship = {{corner1}, Coordinate('B', 1), Coordinate('C', 1)};
     expectNeighbourFields(ship, {Coordinate('D', 1)});
 
-    ship = {corner3, Coordinate(lastLetter, lastDigit-1), Coordinate(lastLetter, lastDigit-2)};
-    expectNeighbourFields(ship, {Coordinate(lastLetter, lastDigit-3)});
+    ship = {corner3, Coordinate(lastLetter, lastDigit - 1), Coordinate(lastLetter, lastDigit - 2)};
+    expectNeighbourFields(ship, {Coordinate(lastLetter, lastDigit - 3)});
 }

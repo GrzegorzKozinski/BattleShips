@@ -11,7 +11,7 @@ namespace BattleShips
         char letter;
         int digit;
 
-        Coordinate() : letter{'y'}, digit{66} {}
+        Coordinate() : letter{'y'}, digit{666} {} // default??
         Coordinate(const char c, const int d) : letter{c}, digit{d} {}
 
         std::pair<uint8_t, uint8_t> getIndices() const
@@ -40,9 +40,20 @@ namespace BattleShips
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, const Coordinate& coord)
+    inline std::ostream &operator<<(std::ostream &os, const Coordinate &coord)
     {
         os << coord.letter << coord.digit;
         return os;
     }
+    inline std::ostream &operator<<(std::ostream &os, const std::set<BattleShips::Coordinate> &set)
+    {
+        os << "[ ";
+        for (const auto &coord : set)
+        {
+            os << coord << " ";
+        }
+        os << "]";
+        return os;
+    }
+
 } // namespace BattleShips
