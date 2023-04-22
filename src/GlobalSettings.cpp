@@ -21,7 +21,6 @@ GlobalSettings::GlobalSettings()
     std::cout <<"GlobalSettings c-tor\n";
 }
 
-// Static method to print dashed row
 void GlobalSettings::print_dashed_row()
 {
     std::cout<< "\n--|";
@@ -32,13 +31,11 @@ void GlobalSettings::print_dashed_row()
     std::cout<< "\n";
 }
 
-// Static method to check if a value is outside the board range
 bool GlobalSettings::isOutsideRange(const uint64_t i)
 {
     return i > general::boardSize or i <= 0;
 }
 
-// Method to print header of the board
 void GlobalSettings::printHeader() const
 {
     std::cout  << "+ | ";
@@ -49,13 +46,11 @@ void GlobalSettings::printHeader() const
     print_dashed_row();
 }
 
-// Method to check if a given character is contained in the array of letters
 bool GlobalSettings::lettersContainChar(const char c) const
 {
     return std::find(letters.begin(), letters.end(), c) != letters.end();
 }
 
-// Method to check if a given input string is invalid
 bool GlobalSettings::isBadInput(const std::string& input) const
 {
     std::cout << "Input is "<< input << "\n";
@@ -82,7 +77,6 @@ bool GlobalSettings::isBadInput(const std::string& input) const
     return true;
 }
 
-// Method to get a field from user input
 Coordinate GlobalSettings::getFieldFromUser() const
 {
     std::string userInput;
@@ -100,27 +94,13 @@ Coordinate GlobalSettings::getFieldFromUser() const
     return c;
 }
 
-// Method to get the index of a character in the array of letters
 uint8_t GlobalSettings::indexOf(const char c) const
 {
     std::cout << "indexOf: char to find: "  << c << "\n";
     const auto itr = std::find(letters.begin(), letters.end(), c);
     return std::distance(letters.begin(), itr); // simpler and letter should already be checked during user input validation
 }
-// bool GlobalSettings::isFieldInLine(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-// {
-//     if(set.size() == 0 ) return true;
-//     return isAlingnedHorizantally(newCoord, set) or isAlignedVertically(newCoord, set);
-// }
 
-// bool GlobalSettings::isAlingnedHorizantally(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-// {
-//     return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.letter == newCoord.letter;});
-// }
-// bool GlobalSettings::isAlignedVertically(const Coordinate& newCoord, const std::set<Coordinate>& set) const
-// {
-//     return std::all_of(set.begin(), set.end(), [&](const Coordinate& coord){return coord.digit == newCoord.digit;});
-// }
 char GlobalSettings::lastLetter() const
 {
     return letters.back();

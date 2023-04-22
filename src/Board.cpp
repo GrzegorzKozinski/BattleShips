@@ -8,7 +8,7 @@
 namespace BattleShips
 {
 
-    Board::Board() 
+    Board::Board()
     {
         clear();
         std::cout << "Board constructed \n";
@@ -39,7 +39,7 @@ namespace BattleShips
         return fields_[idx.first][idx.second]; // to test thiws method
     }
 
-    EField& Board::getFieldRef(const Coordinate &coordinate) const
+    EField &Board::getFieldRef(const Coordinate &coordinate) const
     {
         const auto idx{coordinate.getIndices()};
         return fields_[idx.first][idx.second];
@@ -58,5 +58,66 @@ namespace BattleShips
             GlobalSettings::print_dashed_row();
         }
     }
+    void Board::markNewShipPosition(const std::set<Coordinate> &shipCoords)
+    {
+        for (const auto &coordinate : shipCoords)
+        {
+            setField(coordinate, EField::SHIP);
+        }
+    }
 
+    void Board::surroundShipsWithMissFields(const std::set<Coordinate> &shipCoords)
+    {
+        const auto fieldsToSetAsMiss{getAllSurroundingFields(shipCoords)};
+        for (const auto &coord : fieldsToSetAsMiss)
+        {
+            setField(coord, EField::MISSED);
+        }
+    }
+
+    std::set<Coordinate> Board::getAllSurroundingFields(const std::set<Coordinate> &shipCoords) const
+    {
+        std::set<Coordinate> result{};
+        for (const auto &coord : shipCoords)
+        {
+            result.merge(getNeighbourFields(coord));
+        }
+
+        for (auto it{shipCoords.begin()}; it != shipCoords.end(); ++it)
+        {
+            const auto matchingField = std::find(result.begin(), result.end(), *it);
+            if (matchingField != result.end()) // ship field found among result fields
+            {
+                result.erase(*matchingField);
+            }
+        }
+        log("all neighbours:", result);
+        return result;
+    }
+    bool Board::isFieldFree(const Coordinate &coordinate) const
+    {
+        const bool empty{getField(coordinate) == EField::EMPTY};
+        if (not empty)
+        {
+            std::cout << "This field is not empty!\n";
+        }
+        return empty;
+    }
+    std::set<Coordinate> Board::getNeighbourFields(const Coordinate &baseCoordinate) const // second field setup
+    {
+        log("Player::getNeighbourFields(const Coordinate &baseCoordinate)");
+        std::set<Coordinate> result;
+        const auto l = baseCoordinate.letter;
+        const auto d = baseCoordinate.digit;
+
+        if (l != 'A')
+            result.emplace(l - 1, d);
+        if (l != settings_.lastLetter())
+            result.emplace(l + 1, d);
+        if (d != 1)
+            result.emplace(l, d - 1);
+        if (d != general::boardSize) // last digit
+            result.emplace(l, d + 1);
+        return result;
+    }
 } // namespace BattleShips
