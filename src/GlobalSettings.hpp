@@ -18,7 +18,7 @@ namespace BattleShips
         void printHeader() const;
         bool lettersContainChar(const char c) const;
         bool isBadInput(const std::string &input) const;
-        Coordinate getFieldFromUser() const;
+        Coordinate getFieldFromUser(const std::string& prompt = "Type coordinate: \n") const;
         uint8_t indexOf(const char c) const;
         template <class T>
         inline void print(const T& container) const;

@@ -58,6 +58,7 @@ namespace BattleShips
             GlobalSettings::print_dashed_row();
         }
     }
+
     void Board::markNewShipPosition(const std::set<Coordinate> &shipCoords)
     {
         for (const auto &coordinate : shipCoords)
@@ -94,15 +95,27 @@ namespace BattleShips
         log("all neighbours:", result);
         return result;
     }
+    
     bool Board::isFieldFree(const Coordinate &coordinate) const
     {
         const bool empty{getField(coordinate) == EField::EMPTY};
         if (not empty)
         {
-            std::cout << "This field is not empty!\n";
+            log("This field is not empty!");
         }
         return empty;
     }
+
+    bool Board::notProperForCreatingShip(const Coordinate& coord) const
+    {
+        const bool isBadField{not isFieldFree(coord) or getNeighbourFields(coord).empty()};
+        if(isBadField) 
+        {
+            log("Cant place new ship here!");
+        }
+        return isBadField;
+    }
+
     std::set<Coordinate> Board::getNeighbourFields(const Coordinate &baseCoordinate) const // second field setup
     {
         log("Player::getNeighbourFields(const Coordinate &baseCoordinate)");
@@ -118,6 +131,56 @@ namespace BattleShips
             result.emplace(l, d - 1);
         if (d != general::boardSize) // last digit
             result.emplace(l, d + 1);
+        removeOtherThanEmptyFields(result);
         return result;
+    }
+
+    std::set<Coordinate> Board::getNeighbourFields(const std::set<Coordinate> &shipCoords) const// 3rd and more fields setting
+    {
+        const auto firstShipFiled = shipCoords.cbegin();
+        const auto lastShipFiled{--shipCoords.cend()};
+         // determine ship's orientation
+        std::set<Coordinate> result{getAllSurroundingFields(shipCoords)};
+     
+        const bool sameLettersExpected{(*firstShipFiled).letter == (*lastShipFiled).letter};
+        if (sameLettersExpected) // erase different letters
+        {
+            log("same letters branch");
+            for (auto it{result.begin()}; it != result.end();)
+            {
+                if ((*it).letter != (*firstShipFiled).letter)
+                    it = result.erase(it);
+                else
+                    ++it;
+            }
+        }
+        else if ((*firstShipFiled).digit == (*lastShipFiled).digit) // erase different digits
+        {
+            log("same digit branch");
+            for (auto it{result.begin()}; it != result.end();)
+            {
+
+                if ((*it).digit != (*firstShipFiled).digit)
+                    it = result.erase(it);
+                else
+                    ++it;
+            }
+        }
+        else // should not happen
+        {
+            std::cout << "Error: Ship fields not in line" << std::endl;
+        }
+        return result;
+    }
+
+    void Board::removeOtherThanEmptyFields(std::set<Coordinate> &coords) const
+    {
+    for (auto it{coords.begin()}; it != coords.end();)
+        {
+            if (not isFieldFree(*it))
+                it = coords.erase(it);
+            else
+                ++it;
+        }
     }
 } // namespace BattleShips

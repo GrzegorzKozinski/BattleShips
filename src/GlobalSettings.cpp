@@ -77,13 +77,13 @@ bool GlobalSettings::isBadInput(const std::string& input) const
     return true;
 }
 
-Coordinate GlobalSettings::getFieldFromUser() const
+Coordinate GlobalSettings::getFieldFromUser(const std::string& prompt ) const
 {
     std::string userInput;
     Coordinate c;
     do
     {
-        std::cout << "Type coordinate: \n";
+        std::cout << prompt;
         userInput.clear();
         std::cin >> userInput;
     }

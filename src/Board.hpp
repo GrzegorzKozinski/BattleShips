@@ -14,10 +14,8 @@ namespace BattleShips
     public:
         Board();
         ~Board();
-
-        void printBoard() const;
-
         void clear();
+        void printBoard() const;
         Fields getFields() const;
         EField getField(const Coordinate &coordinate) const;
         void setField(const Coordinate &coordinate, const EField field)
@@ -34,45 +32,11 @@ namespace BattleShips
         bool isFieldFree(const Coordinate &coordinate) const;
         std::set<Coordinate> getAllSurroundingFields(const std::set<Coordinate> &shipCoords) const;
         std::set<Coordinate> getNeighbourFields(const Coordinate &baseCoordinate) const; // second field setup
-        std::set<Coordinate> getNeighbourFields(const std::set<Coordinate> &shipCoords) const // 3rd and more fields setting
-        {
-            const auto firstShipFiled = shipCoords.cbegin();
-            const auto lastShipFiled{--shipCoords.cend()};
-            const bool sameLettersExpected{(*firstShipFiled).letter == (*lastShipFiled).letter}; // determine ship's orientation
-            std::set<Coordinate> result(getAllSurroundingFields(shipCoords));
-            if (sameLettersExpected) //erase different letters
-            {
-                log("same letters branch");
-                for (auto it{result.begin()}; it != result.end();) 
-                {
-                    if ((*it).letter != (*firstShipFiled).letter)
-                        it = result.erase(it); 
-                    else
-                        ++it;
-                }
-            }
-            else if ((*firstShipFiled).digit == (*lastShipFiled).digit) //erase different digits
-            {
-                log("same digit branch");
-                for (auto it{result.begin()}; it != result.end();)
-                {
-
-                    if ((*it).digit != (*firstShipFiled).digit)
-                        it = result.erase(it); 
-                    else
-                        ++it;
-                }
-            }
-            else //should not happen
-            {
-                std::cout << "Error: Ship fields not in line" << std::endl;
-            }
-    
-            return result;
-        }
-        
+        std::set<Coordinate> getNeighbourFields(const std::set<Coordinate> &shipCoords)const ;
+        bool notProperForCreatingShip(const Coordinate& coord) const;
+ 
     private:
-        
+        void removeOtherThanEmptyFields(std::set<Coordinate> &coords) const;
         GlobalSettings settings_;
         mutable Fields fields_{}; // board as  collection of Fields
     };

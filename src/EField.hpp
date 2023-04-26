@@ -23,7 +23,7 @@ inline std::ostream& operator<<(std::ostream& out, const EField& e)
             out << 'X';
             break;
         case EField::MISSED:
-            out << 'O';
+            out << '*';
             break;
         default:
             break;

@@ -13,7 +13,7 @@ class TestBoard : public ::testing::Test
 protected:
     Board board;
     template <class T>
-    void expectNeighbourFields(const T &placedFields, const std::set<Coordinate> &expectedSet) const
+    void expectNeighbourFields(const T &placedFields, const std::set<Coordinate> &expectedSet)
     {
         const std::set<Coordinate> result{board.getNeighbourFields(placedFields)};
         EXPECT_EQ(result, expectedSet);
@@ -148,4 +148,11 @@ TEST_F(TestBoard, getNextPossibleFields_3FieldsPlacedWithCorners)
 
     ship = {corner3, Coordinate(lastLetter, lastDigit - 1), Coordinate(lastLetter, lastDigit - 2)};
     expectNeighbourFields(ship, {Coordinate(lastLetter, lastDigit - 3)});
+}
+
+TEST_F(TestBoard, getFieldAndCheckIfShipCouldBeCretedFromThisCoord)
+{
+    const std::istringstream input("B2\nB3\nB4\nA5\n");
+    auto cin_backup = std::cin.rdbuf();
+    EXPECT_EQ();
 }
