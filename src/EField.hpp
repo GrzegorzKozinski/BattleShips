@@ -1,33 +1,35 @@
 #pragma once
 #include <ostream>
-namespace BattleShips{
+namespace BattleShips
+{
 
 enum class EField
 {
-    EMPTY , 
-    SHIP ,
-    HIT ,
+    EMPTY,
+    SHIP,
+    HIT,
     MISSED
-}; 
+};
 
-inline std::ostream& operator<<(std::ostream& out, const EField& e) 
+inline std::ostream& operator<<(std::ostream& out, const EField& e)
 {
-    switch(e) {
-        case EField::EMPTY:
-            out << ' '; 
-            break;
-        case EField::SHIP:
-            out << 'S';
-            break;
-        case EField::HIT:
-            out << 'X';
-            break;
-        case EField::MISSED:
-            out << '*';
-            break;
-        default:
-            break;
+    switch (e)
+    {
+    case EField::EMPTY:
+        out << ' ';
+        break;
+    case EField::SHIP:
+        out << 'S';
+        break;
+    case EField::HIT:
+        out << 'X';
+        break;
+    case EField::MISSED:
+        out << '*';
+        break;
+    default:
+        break;
     }
     return out;
 }
-}
+} // namespace BattleShips

@@ -1,10 +1,10 @@
-#include <gtest/gtest.h>
 #include "../src/Board.cpp"
 #include "../src/Board.hpp"
 #include "../src/Coordinate.hpp"
+#include "../src/EField.hpp"
 #include "../src/GlobalSettings.cpp"
 #include "../src/GlobalSettings.hpp"
-#include "../src/EField.hpp"
+#include <gtest/gtest.h>
 
 using namespace BattleShips;
 
@@ -13,7 +13,7 @@ class TestBoard : public ::testing::Test
 protected:
     Board board;
     template <class T>
-    void expectNeighbourFields(const T &placedFields, const std::set<Coordinate> &expectedSet)
+    void expectNeighbourFields(const T& placedFields, const std::set<Coordinate>& expectedSet)
     {
         const std::set<Coordinate> result{board.getNeighbourFields(placedFields)};
         EXPECT_EQ(result, expectedSet);
@@ -21,10 +21,11 @@ protected:
     bool allFieldsEqual(const std::set<Coordinate> coords, const EField field) const
     {
         return std::all_of(coords.begin(), coords.end(),
-            [&](const Coordinate &coordinate) { return board.getField(coordinate) == field; });
+                           [&](const Coordinate& coordinate)
+                           { return board.getField(coordinate) == field; });
     }
     static constexpr char lastLetter{'A' + general::boardSize - 1};
-    static constexpr int  lastDigit {general::boardSize};
+    static constexpr int lastDigit{general::boardSize};
     const Coordinate corner1{'A', 1}, corner2{lastLetter, 1},
         corner3{lastLetter, lastDigit}, corner4{'A', lastDigit};
 };
@@ -32,10 +33,10 @@ protected:
 TEST_F(TestBoard, BoardConstructedAllWithEmptyFields)
 {
     Board freshBoard{};
-    const auto allFiledsEmpty = [](const auto &row)
+    const auto allFiledsEmpty = [](const auto& row)
     {
         return std::all_of(row.begin(), row.end(),
-                           [](const auto &field)
+                           [](const auto& field)
                            { return field == EField::EMPTY; });
     };
 
@@ -48,7 +49,7 @@ TEST_F(TestBoard, GetFieldReturnsCorrectField)
     const BattleShips::Coordinate coordinate('A', 1);
     const EField expectedField = EField::EMPTY;
 
-    EField &actualField = board.getFieldRef(coordinate);
+    EField& actualField = board.getFieldRef(coordinate);
     EXPECT_EQ(actualField, expectedField);
 }
 
@@ -80,7 +81,7 @@ TEST_F(TestBoard, markNewShipPositionSetsGivenCoordinatesAsShip)
     board.markNewShipPosition(incomingCoords);
     board.printBoard();
     const bool allFieldsAtCoordsHaveStateShip{std::all_of(incomingCoords.begin(), incomingCoords.end(),
-                                                          [&](const Coordinate &coordinate)
+                                                          [&](const Coordinate& coordinate)
                                                           { return board.getField(coordinate) == EField::SHIP; })};
     EXPECT_TRUE(allFieldsAtCoordsHaveStateShip);
 }
@@ -88,11 +89,11 @@ TEST_F(TestBoard, markNewShipPositionSetsGivenCoordinatesAsShip)
 TEST_F(TestBoard, surroundShipsWithMissFieldsSetsAllNeighbourFieldsAsMissed)
 {
     board.clear();
-    const std::set<Coordinate> shipCoords{ Coordinate('A', 1), Coordinate('A', 2), Coordinate('A', 3) };
+    const std::set<Coordinate> shipCoords{Coordinate('A', 1), Coordinate('A', 2), Coordinate('A', 3)};
     // [ B1, B2, B3, A4 ] is surruonding it
-    const std::set<Coordinate> surroundingFields{ Coordinate('B', 1), Coordinate('B', 2), Coordinate('B', 3), Coordinate('A', 4) };
+    const std::set<Coordinate> surroundingFields{Coordinate('B', 1), Coordinate('B', 2), Coordinate('B', 3), Coordinate('A', 4)};
     board.surroundShipsWithMissFields(shipCoords);
-    
+
     EXPECT_TRUE(allFieldsEqual(surroundingFields, EField::MISSED));
 }
 
@@ -148,11 +149,4 @@ TEST_F(TestBoard, getNextPossibleFields_3FieldsPlacedWithCorners)
 
     ship = {corner3, Coordinate(lastLetter, lastDigit - 1), Coordinate(lastLetter, lastDigit - 2)};
     expectNeighbourFields(ship, {Coordinate(lastLetter, lastDigit - 3)});
-}
-
-TEST_F(TestBoard, getFieldAndCheckIfShipCouldBeCretedFromThisCoord)
-{
-    const std::istringstream input("B2\nB3\nB4\nA5\n");
-    auto cin_backup = std::cin.rdbuf();
-    EXPECT_EQ();
 }

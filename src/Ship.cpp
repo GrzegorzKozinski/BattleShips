@@ -1,7 +1,8 @@
 
 // #include "Formatter.hpp"
 #include "Ship.hpp"
-namespace BattleShips{
+namespace BattleShips
+{
 
 uint64_t Ship::shipIdCounter{0};
 
@@ -9,14 +10,13 @@ Ship::Ship(const std::set<Coordinate>& coords) : coords_{coords}
 {
     setShipId(shipIdCounter);
     ++shipIdCounter;
-    //formatter = std::make_unique<Formatter>();
-    
-    std::cout << "Ship #"<< getShipId()<<" constructed\n";
+
+    log("Ship #",getShipId()," constructed\n");
 }
 
 Ship::~Ship()
 {
-    std::cout << "Ship #" << getShipId() << " destroyed \n";
+    log("Ship #",getShipId()," destroyed\n");
 }
 
 void Ship::setShipId(uint64_t id)
@@ -29,7 +29,6 @@ uint64_t Ship::getShipId() const
     return shipId;
 }
 
-
 void Ship::setCoord(Coordinate& coord)
 {
     coords_.insert(coord);
@@ -38,22 +37,21 @@ void Ship::setCoord(Coordinate& coord)
 void Ship::printCoords() const
 {
     std::cout << "Ship coordinates: [ ";
-    for(const auto& coord : coords_)
+    for (const auto& coord : coords_)
     {
         std::cout << coord.letter << coord.digit << " ";
     }
     std::cout << " ]\n";
 }
 
-bool Ship::isFiledOnCoords(const Coordinate& p ) const
-{   
+bool Ship::isFiledOnCoords(const Coordinate& p) const
+{
     return std::find(coords_.begin(), coords_.end(), p) != coords_.end();
 }
-bool Ship::operator< (const Ship& other) const
+bool Ship::operator<(const Ship& other) const
 {
     return this->getShipId() < other.getShipId();
 }
-
 
 // void Ship::surroundPosition(std::vector<std::vector<char>>& board) //
 // {
@@ -64,19 +62,18 @@ bool Ship::operator< (const Ship& other) const
 //          if(formatter->properInputFormat(std::pair<char,int>(field.first-1, field.second)))
 //           tmpSet.insert({field.first-1, field.second});
 
-//         if(formatter->properInputFormat(std::pair<char,int>(field.first + 1, field.second))) 
+//         if(formatter->properInputFormat(std::pair<char,int>(field.first + 1, field.second)))
 //             tmpSet.insert({field.first+1, field.second});
 
-//         if(formatter->properInputFormat(std::pair<char,int>(field.first, field.second-1))) 
+//         if(formatter->properInputFormat(std::pair<char,int>(field.first, field.second-1)))
 //             tmpSet.insert({field.first, field.second-1});
-            
-//         if(formatter->properInputFormat(std::pair<char,int>(field.first, field.second+1))) 
+
+//         if(formatter->properInputFormat(std::pair<char,int>(field.first, field.second+1)))
 //             tmpSet.insert({field.first, field.second+1});
 //     }
-    
+
 //     std::set_difference(tmpSet.begin(), tmpSet.end(),coords_.begin(), coords_.end(),
 //         std::inserter(shipNeighbours,shipNeighbours.end())); //exclude own body from marking
-
 
 //     for(auto& field : shipNeighbours) // mark surrounding on board
 //     {
@@ -85,4 +82,4 @@ bool Ship::operator< (const Ship& other) const
 
 // }
 
-}// namespace BattleShips
+} // namespace BattleShips

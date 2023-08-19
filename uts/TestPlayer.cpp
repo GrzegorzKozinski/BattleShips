@@ -1,13 +1,13 @@
 
-#include <gtest/gtest.h>
 #include "../src/Coordinate.hpp"
 #include "../src/Player.cpp"
 #include "../src/Ship.cpp"
+#include <gtest/gtest.h>
 #include <iostream>
 
 using namespace BattleShips;
 
-class TestPlayer : public ::testing::Test , private BattleShips::Player
+class TestPlayer : public ::testing::Test, private BattleShips::Player
 {
 protected:
     Player player;
@@ -19,7 +19,6 @@ TEST_F(TestPlayer, getShipOfSize3CoordsUserInputCheck)
     const std::istringstream input("A1\nA2\nA3\n");
     auto cin_backup = std::cin.rdbuf();
     const std::set<Coordinate> expectedCoords{Coordinate('A', 1), Coordinate('A', 2), Coordinate('A', 3)};
-    
 
     std::cin.rdbuf(input.rdbuf());
     std::set<Coordinate> inputCoords{player.getNewShipCoords()};

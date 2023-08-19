@@ -4,4 +4,3 @@ double squarefun (const double& number)
 {
     return sqrt(number);
 }
- 

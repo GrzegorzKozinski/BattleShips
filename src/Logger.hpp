@@ -1,12 +1,12 @@
 #pragma once
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 template <typename... Args>
-void log(const Args &...args)
+void log(const Args&... args)
 {
-    const bool printFlag{1};
-    if(printFlag)
+    const bool printFlag{false};
+    if (printFlag)
     {
         std::ostringstream oss;
         ((oss << args << " "), ...); // fold expression to concatenate all arguments
@@ -14,4 +14,3 @@ void log(const Args &...args)
         std::cout << oss.str() << std::endl;
     }
 }
-

@@ -1,10 +1,15 @@
 #include "Player.hpp"
-#include <memory>
+#include <ostream>
+
+void gameLoop()
+{
+
+    BattleShips::Player p1; // Test with only one player
+    p1.shipsSetup();
+}
 
 int main()
-{ 
-    BattleShips::Player p1; //Test with only one player
-    p1.showBoard();
-    p1.shipsSetup();
+{
+    gameLoop();
     return 0;
 }

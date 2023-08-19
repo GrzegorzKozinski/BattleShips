@@ -4,3 +4,4 @@ Makefile-old
 .vscode/
 obj/
 my_program
+.clang-format
